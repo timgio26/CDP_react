@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { AddCustomer } from "./apiCustomer";
 
 const FormContainer = styled.div`
   display: flex;
@@ -52,39 +53,50 @@ const AddCustomerButton = styled(Button)`
     opacity: 0.8;
   }
 `;
-const ErrorMessage = styled.p` 
-color: red; 
-font-size: 14px; 
-margin-top: -10px; 
-margin-bottom: 15px; `;
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+`;
 
-export function FormCust({ onCancel, onConfirm }) {
+export function FormCust({ onCancel, onConfirm, isloading }) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
   function onSubmit(data) {
-    console.log(data);
+    onConfirm(data);
   }
-  console.log(errors.phone)
+
   return (
     <FormContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor="name">Nama</Label>
         <Input
+          disabled={isloading}
           type="text"
           id="name"
           {...register("name", { required: true })}
         />
-        {errors.name?.type === "required" && <ErrorMessage role="alert">Harus diisi</ErrorMessage>}
+        {errors.name?.type === "required" && (
+          <ErrorMessage role="alert">Harus diisi</ErrorMessage>
+        )}
 
         <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" {...register("email")} />
+        <Input
+          disabled={isloading}
+          type="email"
+          id="email"
+          {...register("email")}
+        />
 
         <Label htmlFor="phone">No HP</Label>
         <Input
+          disabled={isloading}
           type="text"
           id="phone"
           {...register("phone", {
@@ -94,12 +106,20 @@ export function FormCust({ onCancel, onConfirm }) {
             },
           })}
         />
-        {errors.phone?.type === "required" && <ErrorMessage role="alert">Harus diisi</ErrorMessage>}
-        {errors.phone?.type === "pattern" && <ErrorMessage role="alert">Masukan Nomor yang benar</ErrorMessage>}
+        {errors.phone?.type === "required" && (
+          <ErrorMessage role="alert">Harus diisi</ErrorMessage>
+        )}
+        {errors.phone?.type === "pattern" && (
+          <ErrorMessage role="alert">Masukan Nomor yang benar</ErrorMessage>
+        )}
 
         <ButtonContainer>
-          <CancelButton onClick={onCancel}>Cancel</CancelButton>
-          <AddCustomerButton>Add Customer</AddCustomerButton>
+          <CancelButton onClick={onCancel} disabled={isloading}>
+            Cancel
+          </CancelButton>
+          <AddCustomerButton disabled={isloading}>
+            Add Customer
+          </AddCustomerButton>
         </ButtonContainer>
       </Form>
     </FormContainer>

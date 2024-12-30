@@ -1,5 +1,5 @@
 export function CustomerTable({ header, data }) {
-  console.log(header);
+  // console.log(header);
   return (
     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
       <thead>

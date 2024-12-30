@@ -8,7 +8,11 @@ import { useGetCustomer } from "../Components/useGetCustomer";
 
 
 export function CustomerList() {
+
   const {isLoading,dataAPI} = useGetCustomer()
+
+  
+
   if (isLoading) return <CircularProgress />;
   return (
     <div className="py-5 px-7">
