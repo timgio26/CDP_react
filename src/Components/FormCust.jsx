@@ -69,7 +69,9 @@ export function FormCust({ onCancel, onConfirm, isloading }) {
   } = useForm();
 
   function onSubmit(data) {
-    onConfirm(data);
+    const formData = { ...data, email: data.email || null,phone: data.phone || null, };
+    // console.log(formData)
+    onConfirm(formData);
   }
 
   return (
