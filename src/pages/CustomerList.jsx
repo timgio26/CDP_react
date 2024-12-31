@@ -1,26 +1,22 @@
 import { CustomerTable } from "../Components/CustomerTable";
-import CircularProgress from "@mui/material/CircularProgress";
+
 import Fab from "@mui/material/Fab";
 import { BasicModal } from "../Components/Modal";
 import { useGetCustomer } from "../Components/useGetCustomer";
-// import AddIcon from '@mui/icons-material/Add';
-
+import { LoadingContainer } from "../Components/LoadingContainer";
 
 
 export function CustomerList() {
 
-  const {isLoading,dataAPI} = useGetCustomer()
+  const {isLoading, isPending, data, error} = useGetCustomer()
 
-  
 
-  if (isLoading) return <CircularProgress />;
+
+  if (!data || isLoading) return <LoadingContainer />;
+  if (error) return <h1>Data Cant Be Loaded, Try Again Later</h1>;
   return (
     <div className="py-5 px-7">
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
-        <CustomerTable header={["name", "email", "phone"]} data={dataAPI} />
-      )}
+      <CustomerTable header={["name", "email", "phone"]} data={data} />
       <div className="fixed bottom-[5%] right-[5%]">
         <BasicModal>
           <Fab color="primary" aria-label="add">
