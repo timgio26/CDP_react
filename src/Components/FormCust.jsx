@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { AddCustomer } from "./apiCustomer";
+import { useAddCustomer } from "./useCustomer";
 
 const FormContainer = styled.div`
   display: flex;
@@ -60,7 +61,8 @@ const ErrorMessage = styled.p`
   margin-bottom: 15px;
 `;
 
-export function FormCust({ onCancel, onConfirm, isloading }) {
+export function FormCust({ onCancel }) {
+  const {addCustomer,isAdding} = useAddCustomer()
   const {
     register,
     handleSubmit,
@@ -71,15 +73,20 @@ export function FormCust({ onCancel, onConfirm, isloading }) {
   function onSubmit(data) {
     const formData = { ...data, email: data.email || null,phone: data.phone || null, };
     // console.log(formData)
-    onConfirm(formData);
+    // onConfirm(formData);
+    onCancel()
+    addCustomer(formData)
+
   }
+
+
 
   return (
     <FormContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor="name">Nama</Label>
         <Input
-          disabled={isloading}
+          disabled={isAdding}
           type="text"
           id="name"
           {...register("name", { required: true })}
@@ -90,7 +97,7 @@ export function FormCust({ onCancel, onConfirm, isloading }) {
 
         <Label htmlFor="email">Email</Label>
         <Input
-          disabled={isloading}
+          disabled={isAdding}
           type="email"
           id="email"
           {...register("email")}
@@ -98,7 +105,7 @@ export function FormCust({ onCancel, onConfirm, isloading }) {
 
         <Label htmlFor="phone">No HP</Label>
         <Input
-          disabled={isloading}
+          disabled={isAdding}
           type="text"
           id="phone"
           {...register("phone", {
@@ -116,10 +123,10 @@ export function FormCust({ onCancel, onConfirm, isloading }) {
         )}
 
         <ButtonContainer>
-          <CancelButton onClick={onCancel} disabled={isloading}>
+          <CancelButton onClick={onCancel} disabled={isAdding}>
             Cancel
           </CancelButton>
-          <AddCustomerButton disabled={isloading}>
+          <AddCustomerButton disabled={isAdding}>
             Add Customer
           </AddCustomerButton>
         </ButtonContainer>

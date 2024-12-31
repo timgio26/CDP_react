@@ -2,7 +2,7 @@ import { CustomerTable } from "../Components/CustomerTable";
 
 import Fab from "@mui/material/Fab";
 import { BasicModal } from "../Components/Modal";
-import { useGetCustomer } from "../Components/useGetCustomer";
+import { useGetCustomer } from "../Components/useCustomer";
 import { LoadingContainer } from "../Components/LoadingContainer";
 
 

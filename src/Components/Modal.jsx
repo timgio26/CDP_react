@@ -18,7 +18,6 @@ const style = {
 };
 
 export function BasicModal({ children }) {
-  const [isloading, setisloading] = useState(false);
   const [open, setOpen] = useState(false);
   
   function handleOpen() {
@@ -30,16 +29,6 @@ export function BasicModal({ children }) {
     setOpen(false);
   }
 
-  async function confirmHandler(data) {
-    try {
-      setisloading(true);
-      const resp = await AddCustomer(data);
-      setisloading(false);
-      setOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   return (
     <div>
@@ -48,8 +37,6 @@ export function BasicModal({ children }) {
         <Box sx={style}>
           <FormCust
             onCancel={handleClose}
-            onConfirm={confirmHandler}
-            isloading={isloading}
           />
         </Box>
       </Modal>
