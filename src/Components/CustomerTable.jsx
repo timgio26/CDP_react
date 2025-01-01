@@ -1,5 +1,14 @@
-export function CustomerTable({ header, data }) {
-  // console.log(header);
+import { DelIconButton } from "./DelIconButton";
+import {useDeleteCustomer} from "./useCustomer"
+
+
+export function CustomerTable({ header=[], data=[] }) {
+  const {DeleteCustomer,isDeleting} = useDeleteCustomer()
+  function handleDelCustomer(id){
+    DeleteCustomer(id)
+    // console.log('del ',id)
+  }
+
   return (
     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
       <thead>
@@ -29,7 +38,9 @@ export function CustomerTable({ header, data }) {
               </td>
             ))}
 
-            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200"></td>
+            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+              <DelIconButton onClick={()=>handleDelCustomer(each.id)}/>
+            </td>
           </tr>
         ))}
       </tbody>

@@ -4,17 +4,14 @@ const URL = import.meta.env.VITE_URL;
 const KEY = import.meta.env.VITE_API_KEY;
 
 export async function AddCustomer(data) {
-  const response = await axios.post(
-    URL,data,
-    {headers: {
-        Authorization: KEY,
-      },
-    }
-  );
-  const respData=response.data
-  return {respData}
+  const response = await axios.post(URL, data, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return { respData };
 }
-
 
 export async function GetCustomer() {
   const response = await axios.get(URL, {
@@ -22,6 +19,16 @@ export async function GetCustomer() {
       Authorization: KEY,
     },
   });
-  const respData=response.data
-  return respData
+  const respData = response.data;
+  return respData;
+}
+
+export async function DelCustomer(id) {
+  const response = await axios.delete(`${URL}${id}/`, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return respData;
 }

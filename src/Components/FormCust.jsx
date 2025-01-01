@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { AddCustomer } from "./apiCustomer";
+// import { AddCustomer } from "./apiCustomer";
 import { useAddCustomer } from "./useCustomer";
 
 const FormContainer = styled.div`

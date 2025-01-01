@@ -5,6 +5,7 @@ import { Dashboard } from "./pages/dashboard";
 import { CustomerList } from "./pages/CustomerList";
 import { CustomerDetail } from "./pages/CustomerDetail";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import toast, { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster />
     </QueryClientProvider>
   );
 }

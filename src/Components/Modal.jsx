@@ -21,11 +21,11 @@ export function BasicModal({ children }) {
   const [open, setOpen] = useState(false);
   
   function handleOpen() {
-    console.log("open");
+    // console.log("open");
     setOpen(true);
   }
   function handleClose() {
-    console.log("close");
+    // console.log("close");
     setOpen(false);
   }
 
