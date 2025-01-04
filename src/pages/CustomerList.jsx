@@ -1,5 +1,5 @@
 import { CustomerTable } from "../Components/CustomerTable";
-
+import { TbUserPlus } from "react-icons/tb";
 import Fab from "@mui/material/Fab";
 import { BasicModal } from "../Components/Modal";
 import { useGetCustomer } from "../Components/useCustomer";
@@ -20,7 +20,7 @@ export function CustomerList() {
       <div className="fixed bottom-[5%] right-[5%]">
         <BasicModal>
           <Fab color="primary" aria-label="add">
-            +
+            <TbUserPlus className="w-1/2 h-1/2"/>
           </Fab>
         </BasicModal>
       </div>

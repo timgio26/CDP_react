@@ -2,12 +2,18 @@ import {
   useMutation,
   useQuery,useQueryClient
 } from '@tanstack/react-query'
-import {GetCustomer,AddCustomer,DelCustomer} from './apiCustomer'
-import toast, { Toaster } from 'react-hot-toast';
+import {GetCustomer,AddCustomer,DelCustomer, GetCustomerDetail} from './apiCustomer'
+import toast from 'react-hot-toast';
 
 
 export function useGetCustomer() {
   const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customers'], queryFn: GetCustomer })
+  return {isLoading, isPending, data, error}
+}
+
+export function useGetCustomerDetail(id) {
+  console.log(id)
+  const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customer'], queryFn: ()=>GetCustomerDetail(id) })
   return {isLoading, isPending, data, error}
 }
 

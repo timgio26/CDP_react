@@ -23,6 +23,17 @@ export async function GetCustomer() {
   return respData;
 }
 
+export async function GetCustomerDetail(id) {
+  console.log(id)
+  const response = await axios.get(`${URL}${id}/`, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return respData;
+}
+
 export async function DelCustomer(id) {
   const response = await axios.delete(`${URL}${id}/`, {
     headers: {

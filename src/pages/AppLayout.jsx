@@ -6,9 +6,11 @@ import { PiUserList } from "react-icons/pi";
 import { FaRegCalendarAlt } from "react-icons/fa";
 export function AppLayout() {
   return (
-    <div className="flex flex-row h-svh w-svw">
-      <div className="w-1/6  min-w-[150px]">
+    <div className="flex flex-col md:flex-row h-svh w-svw">
+      <div className="w-1/6 min-w-[150px]">
         <Logo />
+        <div className="hidden md:block">
+
         <NavItem to="/">
           <RiDashboardLine /> Dashboard
         </NavItem>
@@ -19,8 +21,9 @@ export function AppLayout() {
           <FaRegCalendarAlt />
           Schedule
         </NavItem>
+        </div>
       </div>
-      <div className="bg-slate-100 w-full">
+      <div className="bg-slate-100 w-svw h-svh">
         {/* <h1>content</h1> */}
         <Outlet />
       </div>

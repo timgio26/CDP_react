@@ -1,12 +1,20 @@
-import { DelIconButton } from "./DelIconButton";
+import { IconButton } from "./IconButton";
 import {useDeleteCustomer} from "./useCustomer"
+import { IoMdEye,IoMdTrash } from "react-icons/io";
+import { useNavigate } from "react-router";
 
 
 export function CustomerTable({ header=[], data=[] }) {
   const {DeleteCustomer,isDeleting} = useDeleteCustomer()
+  const navigate=useNavigate()
+  
+  
   function handleDelCustomer(id){
     DeleteCustomer(id)
-    // console.log('del ',id)
+  }
+
+  function handleSeeCustomer(id){
+    navigate(`/customer/${id}/`)
   }
 
   return (
@@ -39,7 +47,11 @@ export function CustomerTable({ header=[], data=[] }) {
             ))}
 
             <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
-              <DelIconButton onClick={()=>handleDelCustomer(each.id)}/>
+              <div className="flex flex-row gap-2">
+              <IconButton onClick={()=>handleSeeCustomer(each.id)}><IoMdEye/></IconButton>
+              <IconButton onClick={()=>handleDelCustomer(each.id)}><IoMdTrash/></IconButton>
+              </div>
+
             </td>
           </tr>
         ))}
