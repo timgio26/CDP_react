@@ -14,13 +14,18 @@ export async function AddCustomer(data) {
 }
 
 export async function GetCustomer() {
-  const response = await axios.get(URL, {
-    headers: {
-      Authorization: KEY,
-    },
-  });
-  const respData = response.data;
-  return respData;
+  try {
+    const response = await axios.get(URL, {
+      headers: {
+        Authorization: KEY,
+      },
+    });
+    const respData = response.data;
+    return respData;
+  } catch (error) {
+    console.log(error.message)
+    throw new Error(error.message)
+  }
 }
 
 export async function GetCustomerDetail(id) {

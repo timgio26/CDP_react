@@ -7,12 +7,12 @@ import toast from 'react-hot-toast';
 
 
 export function useGetCustomer() {
-  const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customers'], queryFn: GetCustomer })
+  const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customers'], queryFn: GetCustomer})
   return {isLoading, isPending, data, error}
 }
 
 export function useGetCustomerDetail(id) {
-  console.log(id)
+  // console.log(id)
   const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customer',id], queryFn: ()=>GetCustomerDetail(id) })
   return {isLoading, isPending, data, error}
 }

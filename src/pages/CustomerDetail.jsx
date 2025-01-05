@@ -1,6 +1,10 @@
 import { useParams } from "react-router";
 import { useGetCustomerDetail } from "../Components/useCustomer";
 import { AiFillPhone, AiFillMail } from "react-icons/ai";
+import { LoadingContainer } from "../Components/LoadingContainer";
+import { BasicModal } from "../Components/MyModal";
+import { TbHomePlus } from "react-icons/tb";
+import { FormAlamat } from "../Components/FormAlamat";
 
 export function CustomerDetail() {
   const { id } = useParams();
@@ -11,6 +15,9 @@ export function CustomerDetail() {
     data: { name, phone, email, addresses } = {},
     error,
   } = useGetCustomerDetail(id);
+
+  if (!name || isLoading) return <LoadingContainer/>;
+  if (error) return <h1>Data Cant Be Loaded, Try Again Later</h1>;
 
   // console.log(data)
 
@@ -39,6 +46,9 @@ export function CustomerDetail() {
       <div>
         {!addresses?.length&&<NoAddress/>    }
       </div>
+        <div className="fixed bottom-[5%] right-[5%]">
+          <BasicModal icon={<TbHomePlus  className="w-1/2 h-1/2"/>} renderitem={()=><FormAlamat/>}/>
+        </div>
     </div>
   );
 }

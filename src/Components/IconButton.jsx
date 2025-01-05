@@ -12,7 +12,7 @@ const ButtonContainerS = styled.div`
   cursor: pointer;
   &:hover {
       /* color: #FF4500; */
-      color: ${({ hoverColor }) => hoverColor || '#007b14'};
+      color: ${({ color }) => color  || '#007b14'};
       opacity: 0.75;
     }
 
@@ -31,7 +31,7 @@ const ButtonContainerS = styled.div`
 
 export function IconButton({ onClick,children,color }) {
   return (
-    <ButtonContainerS hoverColor={color} onClick={onClick}>
+    <ButtonContainerS color={color} onClick={onClick}>
       <button>
         {/* <BiTrashAlt /> */}
         {children}
