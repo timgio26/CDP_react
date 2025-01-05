@@ -11,7 +11,8 @@ const ButtonContainerS = styled.div`
   transition: border-color 0.3s, background-color 0.3s;
   cursor: pointer;
   &:hover {
-      color: #FF4500;
+      /* color: #FF4500; */
+      color: ${({ hoverColor }) => hoverColor || '#007b14'};
       opacity: 0.75;
     }
 
@@ -28,9 +29,9 @@ const ButtonContainerS = styled.div`
   }
 `;
 
-export function IconButton({ onClick,children }) {
+export function IconButton({ onClick,children,color }) {
   return (
-    <ButtonContainerS onClick={onClick}>
+    <ButtonContainerS hoverColor={color} onClick={onClick}>
       <button>
         {/* <BiTrashAlt /> */}
         {children}

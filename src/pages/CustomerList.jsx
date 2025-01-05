@@ -1,9 +1,9 @@
 import { CustomerTable } from "../Components/CustomerTable";
 import { TbUserPlus } from "react-icons/tb";
-import Fab from "@mui/material/Fab";
-import { BasicModal } from "../Components/Modal";
+import { BasicModal } from "../Components/MyModal";
 import { useGetCustomer } from "../Components/useCustomer";
 import { LoadingContainer } from "../Components/LoadingContainer";
+import { FormCust } from "../Components/FormCust";
 
 
 export function CustomerList() {
@@ -18,11 +18,7 @@ export function CustomerList() {
     <div className="py-5 px-7">
       <CustomerTable header={["name", "email", "phone"]} data={data} />
       <div className="fixed bottom-[5%] right-[5%]">
-        <BasicModal>
-          <Fab color="primary" aria-label="add">
-            <TbUserPlus className="w-1/2 h-1/2"/>
-          </Fab>
-        </BasicModal>
+        <BasicModal icon={<TbUserPlus className="w-1/2 h-1/2"/>} renderitem={(props)=><FormCust {...props} />}/>
       </div>
     </div>
   );

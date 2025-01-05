@@ -48,8 +48,8 @@ export function CustomerTable({ header=[], data=[] }) {
 
             <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
               <div className="flex flex-row gap-2">
-              <IconButton onClick={()=>handleSeeCustomer(each.id)}><IoMdEye/></IconButton>
-              <IconButton onClick={()=>handleDelCustomer(each.id)}><IoMdTrash/></IconButton>
+              <IconButton onClick={()=>handleSeeCustomer(each.id)} color={"blue"}><IoMdEye/></IconButton>
+              <IconButton onClick={()=>handleDelCustomer(each.id)} color={"red"}><IoMdTrash/></IconButton>
               </div>
 
             </td>

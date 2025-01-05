@@ -61,7 +61,7 @@ const ErrorMessage = styled.p`
   margin-bottom: 15px;
 `;
 
-export function FormCust({ onCancel }) {
+export function FormCust({ onClose }) {
   const {addCustomer,isAdding} = useAddCustomer()
   const {
     register,
@@ -70,13 +70,17 @@ export function FormCust({ onCancel }) {
     formState: { errors },
   } = useForm();
 
+  console.log(onClose)
+
   function onSubmit(data) {
     const formData = { ...data, email: data.email || null,phone: data.phone || null, };
-    // console.log(formData)
-    // onConfirm(formData);
-    onCancel()
     addCustomer(formData)
+    onClose()
+  }
 
+  function handleCancel(){
+    console.log('cancel')
+    onClose()
   }
 
 
@@ -123,7 +127,7 @@ export function FormCust({ onCancel }) {
         )}
 
         <ButtonContainer>
-          <CancelButton onClick={onCancel} disabled={isAdding}>
+          <CancelButton onClick={handleCancel} disabled={isAdding}>
             Cancel
           </CancelButton>
           <AddCustomerButton disabled={isAdding}>

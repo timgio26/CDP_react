@@ -13,7 +13,7 @@ export function useGetCustomer() {
 
 export function useGetCustomerDetail(id) {
   console.log(id)
-  const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customer'], queryFn: ()=>GetCustomerDetail(id) })
+  const {isLoading, isPending, data, error} = useQuery({ queryKey: ['customer',id], queryFn: ()=>GetCustomerDetail(id) })
   return {isLoading, isPending, data, error}
 }
 
