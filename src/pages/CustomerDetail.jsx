@@ -47,7 +47,7 @@ export function CustomerDetail() {
         {!addresses?.length&&<NoAddress/>    }
       </div>
         <div className="fixed bottom-[5%] right-[5%]">
-          <BasicModal icon={<TbHomePlus  className="w-1/2 h-1/2"/>} renderitem={()=><FormAlamat/>}/>
+          <BasicModal icon={<TbHomePlus  className="w-1/2 h-1/2"/>} renderitem={(props)=><FormAlamat {...props}/>}/>
         </div>
     </div>
   );

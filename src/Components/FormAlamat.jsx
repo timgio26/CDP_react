@@ -10,16 +10,19 @@ const Label = styled.label`
   color: #333;
 `;
 
-const Input = styled.input`
+const Input = styled.textarea`
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 14px;
+  resize: none;
+  height: 80px;
 `;
 
 const ButtonContainer = styled.div`
+  margin-top: 25px;
   display: flex;
   gap: 10px;
 `;
@@ -45,18 +48,21 @@ const AddAddressButton = styled(Button)`
   }
 `;
 
-export function FormAlamat(){
-    return(
-        <Form action="">
-            <Label htmlFor="">Alamat</Label>
-            <Input type="text" />
-            <div className="w-full aspect-video my-2">
-                <Map/>
-            </div>
-            <ButtonContainer>
-                <CancelButton>Cancel</CancelButton>
-            <AddAddressButton>Add Address</AddAddressButton>
-            </ButtonContainer>
-        </Form>
-    )
+export function FormAlamat({ onClose }) {
+  function handleCancel() {
+    onClose();
+  }
+  return (
+    <Form action="">
+      <Label htmlFor="">Alamat</Label>
+      <Input type="text" />
+      <div className="w-full aspect-video my-2">
+        <Map />
+      </div>
+      <ButtonContainer>
+        <CancelButton onClick={handleCancel}>Cancel</CancelButton>
+        <AddAddressButton>Add Address</AddAddressButton>
+      </ButtonContainer>
+    </Form>
+  );
 }
