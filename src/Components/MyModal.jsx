@@ -17,9 +17,9 @@ const style = {
   p: 4,
 };
 
-export function BasicModal({ icon, renderitem }) {
+export function BasicModal({ icon, renderitem,custId=null}) {
   const [open, setOpen] = useState(false);
-
+  
   function handleOpen() {
     // console.log("open");
     setOpen(true);
@@ -37,7 +37,7 @@ export function BasicModal({ icon, renderitem }) {
         </Fab>
       </div>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>{renderitem({ onClose:  handleClose })}</Box>
+        <Box sx={style}>{renderitem({custId, onClose:  handleClose })}</Box>
       </Modal>
     </div>
   );

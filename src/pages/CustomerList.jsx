@@ -16,7 +16,7 @@ export function CustomerList() {
   
   return (
     <div className="py-5 px-7">
-      <CustomerTable header={["name", "email", "phone"]} data={data} />
+      <CustomerTable header={["name", "email", "phone"]} data={data}/>
       <div className="fixed bottom-[5%] right-[5%]">
         <BasicModal icon={<TbUserPlus className="w-1/2 h-1/2"/>} renderitem={(props)=><FormCust {...props} />}/>
       </div>

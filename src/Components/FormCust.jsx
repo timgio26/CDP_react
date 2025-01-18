@@ -70,7 +70,7 @@ export function FormCust({ onClose }) {
     formState: { errors },
   } = useForm();
 
-  console.log(onClose)
+  // console.log(onClose)
 
   function onSubmit(data) {
     const formData = { ...data, email: data.email || null,phone: data.phone || null, };

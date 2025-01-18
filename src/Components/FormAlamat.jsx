@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Map } from "./Map";
+import { useState } from "react";
 const Form = styled.form`
   width: 100%;
 `;
@@ -31,7 +32,7 @@ const Button = styled.button`
   border: none;
   border-radius: 4px;
   font-size: 16px;
-  cursor: pointer;
+  /* cursor: pointer; */
 `;
 const CancelButton = styled(Button)`
   background-color: #cae2ff;
@@ -48,20 +49,45 @@ const AddAddressButton = styled(Button)`
   }
 `;
 
-export function FormAlamat({ onClose }) {
+export function FormAlamat({ onClose,custId}) {
+  const [latlng,setLatLng] = useState({lat:null,lng:null})
+  const [alamat,setAlamat] = useState("")
+
+  // console.log(custId)
+
   function handleCancel() {
     onClose();
   }
+
+  function handleSubmit(e){
+    e.preventDefault()
+    console.log({
+      alamat,latlng
+    })
+  }
+
   return (
     <Form action="">
       <Label htmlFor="">Alamat</Label>
-      <Input type="text" />
+      <Input
+        type="text"
+        value={alamat}
+        onChange={(e) => setAlamat(e.target.value)}
+      />
       <div className="w-full aspect-video my-2">
-        <Map />
+        <Map latlng={latlng} setLatLng={setLatLng} />
       </div>
       <ButtonContainer>
         <CancelButton onClick={handleCancel}>Cancel</CancelButton>
-        <AddAddressButton>Add Address</AddAddressButton>
+        <AddAddressButton
+          onClick={handleSubmit}
+          disabled={alamat.length < 5}
+          className={
+            alamat.length < 5 ? "cursor-not-allowed" : "cursor-pointer"
+          }
+        >
+          Add Address
+        </AddAddressButton>
       </ButtonContainer>
     </Form>
   );
