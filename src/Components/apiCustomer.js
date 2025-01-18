@@ -39,6 +39,17 @@ export async function GetCustomerDetail(id) {
   return respData;
 }
 
+export async function UpdateCustomer({id,data}) {
+  console.log(id,data)
+  const response = await axios.patch(`${URL}customer/${id}/`,data, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return respData;
+}
+
 export async function DelCustomer(id) {
   const response = await axios.delete(`${URL}customer/${id}/`, {
     headers: {

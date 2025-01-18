@@ -80,7 +80,6 @@ export function CustomerTable({ header = [], data = [] }) {
           ))}
         </tbody>
       </table>
-
     </div>
 
 

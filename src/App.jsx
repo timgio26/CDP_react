@@ -6,6 +6,7 @@ import { CustomerList } from "./pages/CustomerList";
 import { CustomerDetail } from "./pages/CustomerDetail";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
+import { AddressDetail } from "./pages/AddressDetail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/customers" element={<CustomerList />} />
               <Route path="/customer/:id" element={<CustomerDetail />} />
+              <Route path="/address/:id" element={<AddressDetail />} />
             </Route>
           </Routes>
         </BrowserRouter>
