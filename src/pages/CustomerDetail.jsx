@@ -5,6 +5,7 @@ import { LoadingContainer } from "../Components/LoadingContainer";
 import { BasicModal } from "../Components/MyModal";
 import { TbHomePlus } from "react-icons/tb";
 import { FormAlamat } from "../Components/FormAlamat";
+import { AddressCard } from "../Components/AddressCard";
 
 export function CustomerDetail() {
   const { id } = useParams();
@@ -19,7 +20,7 @@ export function CustomerDetail() {
   if (!name || isLoading) return <LoadingContainer/>;
   if (error) return <h1>Data Cant Be Loaded, Try Again Later</h1>;
 
-  // console.log(data)
+  console.log(addresses)
 
   function NoAddress() {
     return (
@@ -45,6 +46,10 @@ export function CustomerDetail() {
 
       <div>
         {!addresses?.length&&<NoAddress/>    }
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 mt-3">
+        {addresses.map((each)=><AddressCard key={each.id} data={each}/>)}
+
+        </div>
       </div>
         <div className="fixed bottom-[5%] right-[5%]">
           <BasicModal icon={<TbHomePlus  className="w-1/2 h-1/2"/>} custId={id} renderitem={(props)=><FormAlamat {...props}/>}/>

@@ -13,7 +13,7 @@ export function MyDialog({open,close,onConfirm,data}){
     close();
   }
 
-  console.log(data);
+  // console.log(data);
   return (
     <Dialog open={open}>
       <DialogTitle>Confirm delete Customer?</DialogTitle>

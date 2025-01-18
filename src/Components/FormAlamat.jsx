@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Map } from "./Map";
 import { useState } from "react";
+import { useAddAddress } from "./useCustomer";
 const Form = styled.form`
   width: 100%;
 `;
@@ -49,7 +50,8 @@ const AddAddressButton = styled(Button)`
   }
 `;
 
-export function FormAlamat({ onClose,custId}) {
+export function FormAlamat({ onClose,custId:customer_id}) {
+  const  {addAddress,isAddingAddress} = useAddAddress()
   const [latlng,setLatLng] = useState({lat:null,lng:null})
   const [alamat,setAlamat] = useState("")
 
@@ -61,8 +63,13 @@ export function FormAlamat({ onClose,custId}) {
 
   function handleSubmit(e){
     e.preventDefault()
-    console.log({
-      alamat,latlng
+    addAddress({
+      customer_id,
+      address:alamat,
+      lat:`${latlng.lat}`.slice(0,9),
+      lng:`${latlng.lng}`.slice(0,9),
+    },{
+      onSuccess: handleCancel
     })
   }
 

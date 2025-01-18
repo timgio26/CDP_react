@@ -2,7 +2,7 @@ import {
   useMutation,
   useQuery,useQueryClient
 } from '@tanstack/react-query'
-import {GetCustomer,AddCustomer,DelCustomer, GetCustomerDetail} from './apiCustomer'
+import {GetCustomer,AddCustomer,DelCustomer, GetCustomerDetail,AddAddress as addAddressApi} from './apiCustomer'
 import toast from 'react-hot-toast';
 
 
@@ -22,7 +22,6 @@ export function useAddCustomer(){
   const {mutate:addCustomer,isPending:isAdding} =  useMutation({
     mutationFn:AddCustomer,
     onError:()=>{
-      console.log('error add customer')
       toast.error('error add customer.')
     },
     onSuccess:()=>{
@@ -38,7 +37,6 @@ export function useDeleteCustomer(){
   const {mutate:DeleteCustomer,isPending:isDeleting} =  useMutation({
     mutationFn:DelCustomer,
     onError:()=>{
-      console.log('error delete customer')
       toast.error('error delete customer.')
     },
     onSuccess:()=>{
@@ -47,4 +45,17 @@ export function useDeleteCustomer(){
     },
   })
   return {DeleteCustomer,isDeleting} 
+}
+
+export function useAddAddress(){
+  const {mutate:addAddress,isPending:isAddingAddress} = useMutation({
+    mutationFn:addAddressApi,
+    onError:()=>{
+      toast.error('error add address.')
+    },
+    onSuccess:()=>{
+      toast.success('address succesfully added.')
+    }
+  })
+  return  {addAddress,isAddingAddress}
 }
