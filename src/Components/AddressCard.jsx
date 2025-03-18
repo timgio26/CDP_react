@@ -19,7 +19,7 @@ export function AddressCard({ data }) {
         <div className="flex flex-col justify-between">
           <div onClick={handleClick} className="cursor-pointer">
             <span className="text-lg font-semibold text-gray-800 hover:text-blue-500 transition-colors duration-300">
-              Rumah
+              {data.category}
             </span>
           </div>
           <span className="text-gray-600">{data.address}</span>

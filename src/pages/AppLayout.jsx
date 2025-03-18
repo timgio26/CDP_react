@@ -23,7 +23,7 @@ export function AppLayout() {
         </NavItem>
         </div>
       </div>
-      <div className="bg-slate-100 w-svw h-svh">
+      <div className="bg-slate-100 flex flex-1">
         {/* <h1>content</h1> */}
         <Outlet />
       </div>

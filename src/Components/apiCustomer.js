@@ -70,3 +70,15 @@ export async function AddAddress(data){
   const respData = response.data;
   return respData;
 }
+
+
+export async function GetAddDetail(id) {
+  // console.log(id)
+  const response = await axios.get(`${URL}address/${id}/`, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return respData;
+}

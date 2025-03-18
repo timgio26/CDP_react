@@ -39,7 +39,7 @@ export function CustomerDetail() {
 
 
   return (
-    <div className="mx-3 my-3">
+    <div className="mx-3 my-3 w-full">
       <form onSubmit={handleFormSubmit}>
         <div className="flex flex-col p-2 gap-2">
           <div onDoubleClick={handleDoubleClick} className="flex align-middle">
@@ -85,7 +85,7 @@ export function CustomerDetail() {
 
       <div>
         {!addresses?.length && (
-          <div>
+          <div >
             <span>Belum ada alamat</span>
           </div>
         )}

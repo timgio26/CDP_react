@@ -53,9 +53,10 @@ const AddAddressButton = styled(Button)`
 export function FormAlamat({ onClose,custId:customer_id}) {
   const  {addAddress,isAddingAddress} = useAddAddress()
   const [latlng,setLatLng] = useState({lat:null,lng:null})
+  const [kategori,setKategori] = useState("")
   const [alamat,setAlamat] = useState("")
 
-  // console.log(custId)
+  // console.log(isAddingAddress)
 
   function handleCancel() {
     onClose();
@@ -68,6 +69,7 @@ export function FormAlamat({ onClose,custId:customer_id}) {
       address:alamat,
       lat:`${latlng.lat}`.slice(0,9),
       lng:`${latlng.lng}`.slice(0,9),
+      category:kategori
     },{
       onSuccess: handleCancel
     })
@@ -81,6 +83,17 @@ export function FormAlamat({ onClose,custId:customer_id}) {
         value={alamat}
         onChange={(e) => setAlamat(e.target.value)}
       />
+      <div className="flex flex-col">
+        <label htmlFor="kategori">Kategori</label>
+        <input
+          type="text"
+          name="kategori"
+          id="kategori"
+          className="border border-[#ccc] rounded p-2"
+          value={kategori}
+          onChange={(e) => setKategori(e.target.value)}
+        />
+      </div>
       <div className="w-full aspect-video my-2">
         <Map latlng={latlng} setLatLng={setLatLng} />
       </div>
@@ -88,9 +101,11 @@ export function FormAlamat({ onClose,custId:customer_id}) {
         <CancelButton onClick={handleCancel}>Cancel</CancelButton>
         <AddAddressButton
           onClick={handleSubmit}
-          disabled={alamat.length < 5}
+          disabled={alamat.length < 5 || isAddingAddress}
           className={
-            alamat.length < 5 ? "cursor-not-allowed" : "cursor-pointer"
+            alamat.length < 5 || isAddingAddress
+              ? "cursor-not-allowed"
+              : "cursor-pointer"
           }
         >
           Add Address

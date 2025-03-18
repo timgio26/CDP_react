@@ -2,7 +2,7 @@ import {
   useMutation,
   useQuery,useQueryClient
 } from '@tanstack/react-query'
-import {GetCustomer,AddCustomer,DelCustomer, GetCustomerDetail,AddAddress as addAddressApi,UpdateCustomer as UpdateCustomerApi} from './apiCustomer'
+import {GetCustomer,AddCustomer,DelCustomer, GetCustomerDetail,AddAddress as addAddressApi,UpdateCustomer as UpdateCustomerApi, GetAddDetail} from './apiCustomer'
 import toast from 'react-hot-toast';
 
 
@@ -73,4 +73,11 @@ export function useAddAddress(){
     }
   })
   return  {addAddress,isAddingAddress}
+}
+
+
+export function useGetAddressDetail(id) {
+  // console.log(id)
+  const {isLoading, isPending, data, error} = useQuery({ queryKey: ['address',id], queryFn: ()=>GetAddDetail(id) })
+  return {isLoading, isPending, data, error}
 }
