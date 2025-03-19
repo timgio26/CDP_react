@@ -73,7 +73,7 @@ export async function AddAddress(data){
 
 
 export async function GetAddDetail(id) {
-  // console.log(id)
+  console.log(id)
   const response = await axios.get(`${URL}address/${id}/`, {
     headers: {
       Authorization: KEY,
