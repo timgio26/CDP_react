@@ -71,10 +71,19 @@ export async function AddAddress(data){
   return respData;
 }
 
-
 export async function GetAddDetail(id) {
   console.log(id)
   const response = await axios.get(`${URL}address/${id}/`, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return respData;
+}
+
+export async function AddService(data){
+  const response = await axios.post(URL + "service/", data, {
     headers: {
       Authorization: KEY,
     },

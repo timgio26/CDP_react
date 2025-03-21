@@ -1,30 +1,43 @@
 import { useParams } from "react-router";
-import { useGetAddressDetail } from "../Components/useCustomer";
-import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
-import { LoadingContainer } from "../Components/LoadingContainer";
 
+import { useGetAddressDetail } from "../Components/useCustomer";
+import { LoadingContainer } from "../Components/LoadingContainer";
+import { FormService } from "../Components/FormService";
+
+import { z } from "zod";
+
+const ServiceSchema = z.object({
+  hasil: z.string(), // Expects a string
+  id: z.number(), // Expects a number
+  img_url: z.nullable(z.string()), // Can be null or a string
+  keluhan: z.string(), // Expects a string
+  service_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), // Validates date in "YYYY-MM-DD" format
+  tindakan: z.string(), // Expects a string
+});
+
+const AddressDetailsSchema = z.object({
+  address: z.string(), // Expects a string
+  category: z.string(), // Expects a string
+  id: z.number(), // Expects a number
+  img_url: z.nullable(z.string()), // Can be null or a string
+  lat: z.union([z.string(), z.literal("null")]), // Expects a string, including the string "null"
+  lng: z.union([z.string(), z.literal("null")]),
+  services: z.array(ServiceSchema).nullable(), // Expects a string, including the string "null"
+});
 
 export function AddressDetail() {
   const { id } = useParams();
   const [showForm, setShowForm] = useState(false);
   const { isLoading, isPending, data, error } = useGetAddressDetail(id);
 
-  const [formData,setFormData] = useState({
-    tanggalService:"",
-    keluhan:"",
-    tindakan:"",
-    hasil:"",
-  })
+  const parseResult = AddressDetailsSchema.safeParse(data);
 
-  function handleSubmimt(e){
-    e.preventDefault()
-    console.log('submit')
-  }
-
-  console.log(data, error);
+  console.log(parseResult);
+  // console.log(data, error);
 
   if (isLoading || isPending) return <LoadingContainer />;
+  if (error) return <div>something wrong please try again later</div>;
 
   return (
     <div className="w-full p-5">
@@ -32,7 +45,7 @@ export function AddressDetail() {
         <div className="flex flex-col">
           <span>Service Customer Name</span>
           <span>
-            {data?.address} | {data?.category}
+            {parseResult.data.address} | {parseResult.data.category}
           </span>
         </div>
 
@@ -49,64 +62,35 @@ export function AddressDetail() {
         </div>
       </div>
       <div className="flex justify-center">
-        <form
-          // action=""
-          onSubmit={handleSubmimt}
-          className={`${
-            showForm ? "flex" : "hidden"
-          } flex-col gap-1 p-5 sm:w-1/2 border bg-slate-50 rounded shadow`}
-        >
-          <div className="flex justify-end">
-            <div
-              className="bg-white border rounded-full p-1 cursor-pointer"
-              onClick={() => setShowForm(false)}
-            >
-              <IoMdClose />
+        <FormService setShowForm={setShowForm} showForm={showForm} />
+      </div>
+      <div>
+        {/* service list */}
+        {parseResult.data.services.map((each) => {
+          return (
+            <div key={each.id} className="border p-2 rounded-md shadow my-2">
+              <span className="text-sm font-semibold">
+                service date : {each.service_date}
+              </span>
+              <div className="grid grid-cols-3 justify-evenly border-t">
+                <div>
+                  <span className="text-xs">Keluhan</span>
+                  <p>{each.keluhan}</p>
+                </div>
+                <div>
+                  <span className="text-xs">Tindakan</span>
+                  <p>{each.tindakan}</p>
+                </div>
+                <div>
+                  <span className="text-xs">Hasil</span>
+                  <p>{each.hasil}</p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="tglService" className="text-sm">
-              Tanggal Service
-            </label>
-            <input type="date" name="tglService" id="tglService" value={formData.tanggalService} onChange={(e)=>setFormData((state)=>({...state,tanggalService:e.target.value}))}/>
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="Keluhan" className="text-sm">
-              Keluhan
-            </label>
-            <textarea name="Keluhan" id="Keluhan" value={formData.keluhan} onChange={(e)=>setFormData((state)=>({...state,keluhan:e.target.value}))}/>
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="tindakan" className="text-sm">
-              Tindakan
-            </label>
-            <textarea name="tindakan" id="tindakan" value={formData.tindakan} onChange={(e)=>setFormData((state)=>({...state,tindakan:e.target.value}))}/>
-          </div>
-
-          <div className="flex flex-col">
-            <label htmlFor="hasil" className="text-sm">
-              Hasil
-            </label>
-            <textarea name="hasil" id="hasil" value={formData.hasil} onChange={(e)=>setFormData((state)=>({...state,hasil:e.target.value}))}/>
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="" className="text-sm">
-              Dokumentasi
-            </label>
-            <input type="file" name="" id="" />
-          </div>
-          <input
-            type="submit"
-            value="Add Service"
-            className="bg-[#7989ff] rounded hover:opacity-50 py-1 my-2"
-          />
-        </form>
+          );
+        })}
       </div>
       {/* <p>{data?.address}</p> */}
-
-      <div></div>
     </div>
   );
 }

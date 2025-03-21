@@ -7,6 +7,7 @@ import {
   AddAddress as addAddressApi,
   UpdateCustomer as UpdateCustomerApi,
   GetAddDetail,
+  AddService as addServiceApi,
 } from "./apiCustomer";
 import toast from "react-hot-toast";
 
@@ -92,4 +93,17 @@ export function useGetAddressDetail(id) {
     queryFn: () => GetAddDetail(id),
   });
   return { isLoading, isPending, data, error };
+}
+
+export function useAddService(){
+  const {mutate: AddService ,isPending:isAddingService} = useMutation({
+    mutationFn:addServiceApi,
+    onError: () => {
+      toast.error("error add service.");
+    },
+    onSuccess: () => {
+      toast.success("service succesfully added.");
+    },
+  })
+  return {AddService,isAddingService}
 }
