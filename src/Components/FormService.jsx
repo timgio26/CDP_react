@@ -1,9 +1,13 @@
-import { IoMdClose } from "react-icons/io";
-import { useAddService } from "../Components/useCustomer";
 import { useState } from "react";
 import { useParams } from "react-router";
+import { useQueryClient } from '@tanstack/react-query'
+
+import { IoMdClose } from "react-icons/io";
+import { useAddService } from "../Components/useCustomer";
 
 export function FormService({setShowForm,showForm}) {
+  const queryClient = useQueryClient()
+  
   const { AddService, isAddingService } = useAddService();
   const { id } = useParams();
   
@@ -25,6 +29,7 @@ export function FormService({setShowForm,showForm}) {
       onSuccess: () => {
         setFormData(initialStateForm);
         setShowForm(false);
+        queryClient.invalidateQueries({ queryKey: ['address'] })
       },
     });
     // console.log('submit')
@@ -110,7 +115,7 @@ export function FormService({setShowForm,showForm}) {
       <input
         type="submit"
         value="Add Service"
-        className="bg-[#7989ff] rounded hover:opacity-50 py-1 my-2"
+        className="bg-[#7989ff] rounded hover:opacity-50 py-1 my-2 cursor-pointer"
         disabled={isAddingService}
       />
     </form>

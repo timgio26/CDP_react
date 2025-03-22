@@ -74,12 +74,14 @@ export function useDeleteCustomer() {
 }
 
 export function useAddAddress() {
+  const queryClient = useQueryClient();
   const { mutate: addAddress, isPending: isAddingAddress } = useMutation({
     mutationFn: addAddressApi,
     onError: () => {
       toast.error("error add address.");
     },
     onSuccess: () => {
+      queryClient.invalidateQueries("customer");
       toast.success("address succesfully added.");
     },
   });

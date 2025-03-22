@@ -6,6 +6,9 @@ import { LoadingContainer } from "../Components/LoadingContainer";
 import { FormService } from "../Components/FormService";
 
 import { z } from "zod";
+import { ServiceTile } from "../Components/ServiceTile";
+
+import { FaEdit } from "react-icons/fa";
 
 const ServiceSchema = z.object({
   hasil: z.string(), // Expects a string
@@ -17,6 +20,7 @@ const ServiceSchema = z.object({
 });
 
 const AddressDetailsSchema = z.object({
+  customer_data:z.string(),
   address: z.string(), // Expects a string
   category: z.string(), // Expects a string
   id: z.number(), // Expects a number
@@ -40,13 +44,17 @@ export function AddressDetail() {
   if (error) return <div>something wrong please try again later</div>;
 
   return (
-    <div className="w-full p-5">
+    <div className="w-full p-5 overflow-y-scroll">
       <div className="flex justify-between">
         <div className="flex flex-col">
-          <span>Service Customer Name</span>
+          <span>Service <b>{parseResult.data.customer_data}</b></span>
+          <div className="flex flex-row gap-5 items-center">
+
           <span>
             {parseResult.data.address} | {parseResult.data.category}
           </span>
+          <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity"/>
+          </div>
         </div>
 
         <div className="flex items-center">
@@ -68,25 +76,26 @@ export function AddressDetail() {
         {/* service list */}
         {parseResult.data.services.map((each) => {
           return (
-            <div key={each.id} className="border p-2 rounded-md shadow my-2">
-              <span className="text-sm font-semibold">
-                service date : {each.service_date}
-              </span>
-              <div className="grid grid-cols-3 justify-evenly border-t">
-                <div>
-                  <span className="text-xs">Keluhan</span>
-                  <p>{each.keluhan}</p>
-                </div>
-                <div>
-                  <span className="text-xs">Tindakan</span>
-                  <p>{each.tindakan}</p>
-                </div>
-                <div>
-                  <span className="text-xs">Hasil</span>
-                  <p>{each.hasil}</p>
-                </div>
-              </div>
-            </div>
+            <ServiceTile data={each} key={each.id}/>
+            // <div key={each.id} className="border p-2 rounded-md shadow my-2">
+            //   <span className="text-sm font-semibold">
+            //     service date : {each.service_date}
+            //   </span>
+            //   <div className="grid grid-cols-3 justify-evenly border-t">
+            //     <div>
+            //       <span className="text-xs">Keluhan</span>
+            //       <p>{each.keluhan}</p>
+            //     </div>
+            //     <div>
+            //       <span className="text-xs">Tindakan</span>
+            //       <p>{each.tindakan}</p>
+            //     </div>
+            //     <div>
+            //       <span className="text-xs">Hasil</span>
+            //       <p>{each.hasil}</p>
+            //     </div>
+            //   </div>
+            // </div>
           );
         })}
       </div>
