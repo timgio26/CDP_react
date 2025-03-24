@@ -1,5 +1,10 @@
+import { useNavigate } from "react-router";
 
 export function ServiceTile({data}){
+  const navigate = useNavigate()
+  function seeDetails(){
+    navigate('/service/'+data.id)
+  }
     return (
       <div key={data.id} className="border p-2 rounded-md shadow my-2">
         <div className="flex justify-between">
@@ -11,7 +16,7 @@ export function ServiceTile({data}){
           
 
             {/* </div> */}
-          <div className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity">
+          <div className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity" onClick={seeDetails}>
             details
           </div>
         </div>

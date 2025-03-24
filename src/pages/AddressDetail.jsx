@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useState } from "react";
 
-import { useGetAddressDetail } from "../Components/useCustomer";
+import { useGetAddressDetail, useUpdateAddress } from "../Components/useCustomer";
 import { LoadingContainer } from "../Components/LoadingContainer";
 import { FormService } from "../Components/FormService";
 
@@ -9,6 +9,7 @@ import { z } from "zod";
 import { ServiceTile } from "../Components/ServiceTile";
 
 import { FaEdit } from "react-icons/fa";
+// import { UpdateAddress } from "../Components/apiCustomer";
 
 const ServiceSchema = z.object({
   hasil: z.string(), // Expects a string
@@ -20,7 +21,7 @@ const ServiceSchema = z.object({
 });
 
 const AddressDetailsSchema = z.object({
-  customer_data:z.string(),
+  customer_data: z.string(),
   address: z.string(), // Expects a string
   category: z.string(), // Expects a string
   id: z.number(), // Expects a number
@@ -32,13 +33,33 @@ const AddressDetailsSchema = z.object({
 
 export function AddressDetail() {
   const { id } = useParams();
-  const [showForm, setShowForm] = useState(false);
   const { isLoading, isPending, data, error } = useGetAddressDetail(id);
 
+  const [showForm, setShowForm] = useState(false);
+  const [isEditAdd, setIsEditAdd] = useState(false);
   const parseResult = AddressDetailsSchema.safeParse(data);
+  const [formUpdate, setFormUpdate] = useState({
+    address: "",
+    category: "",
+  });
 
-  console.log(parseResult);
-  // console.log(data, error);
+  const {UpdateAddress,isUpdating} = useUpdateAddress()
+
+  function handleFormAddress(e){
+    setFormUpdate((state)=>({...state,address:e.target.value}))
+  }
+
+  function handleFormKategori(e){
+    setFormUpdate((state)=>({...state,category:e.target.value}))
+  }
+
+  function handleUpdateAlamat() {
+    console.log(formUpdate);
+    UpdateAddress(
+      { id: id, data: formUpdate },
+      { onSuccess: () => setIsEditAdd(false) }
+    );
+  }
 
   if (isLoading || isPending) return <LoadingContainer />;
   if (error) return <div>something wrong please try again later</div>;
@@ -47,20 +68,60 @@ export function AddressDetail() {
     <div className="w-full p-5 overflow-y-scroll">
       <div className="flex justify-between">
         <div className="flex flex-col">
-          <span>Service <b>{parseResult.data.customer_data}</b></span>
-          <div className="flex flex-row gap-5 items-center">
-
-          <span>
-            {parseResult.data.address} | {parseResult.data.category}
+          <span className="text-xl">
+            Service <b>{parseResult.data.customer_data}</b>
           </span>
-          <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity"/>
-          </div>
+          {isEditAdd ? (
+            <div>
+              <form
+                action=""
+                className="flex flex-row gap-1 "
+              >
+                {/* <label htmlFor="alamat" className="text-sm">
+                  Alamat
+                </label> */}
+                <input name="alamat" id="alamat" className="px-2" value={formUpdate?.address} onChange={handleFormAddress}/>
+                {/* <input type="text" id="alamat" name="alamat" /> */}
+                {/* <label htmlFor="kategori" className="text-sm">
+                  Kategori
+                </label> */}
+                <span>|</span>
+                <input type="text" id="kategori" name="kategori" className="px-2" value={formUpdate?.category} onChange={handleFormKategori}/>
+                <div className="flex flex-row justify-end gap-1">
+                  <div
+                    className="bg-gray-400 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
+                    onClick={() => setIsEditAdd(false)}
+                  >
+                    cancel
+                  </div>
+                  <div className="bg-green-500 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
+                  onClick={handleUpdateAlamat}>
+                    submit
+                  </div>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <div className="flex flex-row gap-5 items-center">
+              <div>
+                <span>
+                  {parseResult.data.address} | {parseResult.data.category}
+                </span>
+              </div>
+              <div onClick={() =>{ 
+                setFormUpdate((state)=>({...state,address:parseResult.data.address,category:parseResult.data.category}))
+                setIsEditAdd(true)
+                }}>
+                <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity" />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center">
-          <div className="px-5">
+          <div>
             <div
-              className="px-5 py-1 bg-blue-400 rounded hover:opacity-50 cursor-pointer"
+              className="px-5 py-1 bg-blue-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
               hidden={showForm}
               onClick={() => setShowForm(true)}
             >
@@ -76,7 +137,7 @@ export function AddressDetail() {
         {/* service list */}
         {parseResult.data.services.map((each) => {
           return (
-            <ServiceTile data={each} key={each.id}/>
+            <ServiceTile data={each} key={each.id} />
             // <div key={each.id} className="border p-2 rounded-md shadow my-2">
             //   <span className="text-sm font-semibold">
             //     service date : {each.service_date}

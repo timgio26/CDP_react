@@ -8,8 +8,9 @@ const NavItemSingle = styled.div`
   margin-right: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left:12px;
   cursor: pointer;
-  justify-content:center;
+  /* justify-content:center; */
   gap:5px;
   align-items:center;
   flex-direction:row;
