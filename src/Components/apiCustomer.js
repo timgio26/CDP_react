@@ -129,3 +129,14 @@ export async function DelService(id) {
   return respData;
 }
 
+
+export async function UpdateService({id,data}) {
+  console.log(id,data)
+  const response = await axios.patch(`${URL}service/${id}/`,data, {
+    headers: {
+      Authorization: KEY,
+    },
+  });
+  const respData = response.data;
+  return respData;
+}

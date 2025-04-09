@@ -10,7 +10,8 @@ import {
   AddService as addServiceApi,
   GetService,
   DelService,
-  UpdateAddress as updateAddressApi
+  UpdateAddress as updateAddressApi,
+  UpdateService as updateServiceApi
 } from "./apiCustomer";
 import toast from "react-hot-toast";
 import {z} from 'zod'
@@ -149,9 +150,9 @@ export function useGetService(id){
     queryKey: ["service", id],
     queryFn: () => GetService(id),
   });
-  console.log(data)
+  // console.log(data)
   const parseResult = serviceSchema.safeParse(data)
-  console.log(parseResult)
+  // console.log(parseResult)
   return { isLoading, isPending, data:parseResult, error }; 
 }
 
@@ -159,12 +160,27 @@ export function useDelService() {
   const queryClient = useQueryClient();
   const {mutate: DeleteService, isPending: isDeleting} = useMutation({ mutationFn: DelService ,
     onError: () => {
-      toast.error("error delete customer.");
+      toast.error("error delete service.");
     },
     onSuccess: () => {
       queryClient.invalidateQueries("address");
-      toast.success("Customer successfuly deleted");
+      toast.success("Service successfuly deleted");
     },
   });
   return {DeleteService,isDeleting}
+}
+
+export function useUpadteService(){
+  const queryClient = useQueryClient();
+  const {mutate: UpdateService, isPending: isUpdating} =  useMutation({
+    mutationFn: updateServiceApi,
+    onError: () => {
+      toast.error("error update alamat.");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("service");
+      toast.success("alamat successfuly updated");
+    },
+  })
+  return { UpdateService, isUpdating };
 }
