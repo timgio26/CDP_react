@@ -1,7 +1,11 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
 
-import { useGetAddressDetail, useUpdateAddress } from "../Components/useCustomer";
+import {
+  useDeleteAddress,
+  useGetAddressDetail,
+  useUpdateAddress,
+} from "../Components/useCustomer";
 import { LoadingContainer } from "../Components/LoadingContainer";
 import { FormService } from "../Components/FormService";
 
@@ -22,6 +26,7 @@ const ServiceSchema = z.object({
 
 const AddressDetailsSchema = z.object({
   customer_data: z.string(),
+  customer_id: z.number(),
   address: z.string(), // Expects a string
   category: z.string(), // Expects a string
   id: z.number(), // Expects a number
@@ -32,9 +37,10 @@ const AddressDetailsSchema = z.object({
 });
 
 export function AddressDetail() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { isLoading, isPending, data, error } = useGetAddressDetail(id);
-
+  const { DeleteAddress, isDeleting } = useDeleteAddress();
   const [showForm, setShowForm] = useState(false);
   const [isEditAdd, setIsEditAdd] = useState(false);
   const parseResult = AddressDetailsSchema.safeParse(data);
@@ -43,16 +49,14 @@ export function AddressDetail() {
     category: "",
   });
 
+  const { UpdateAddress, isUpdating } = useUpdateAddress();
 
-
-  const {UpdateAddress,isUpdating} = useUpdateAddress()
-
-  function handleFormAddress(e){
-    setFormUpdate((state)=>({...state,address:e.target.value}))
+  function handleFormAddress(e) {
+    setFormUpdate((state) => ({ ...state, address: e.target.value }));
   }
 
-  function handleFormKategori(e){
-    setFormUpdate((state)=>({...state,category:e.target.value}))
+  function handleFormKategori(e) {
+    setFormUpdate((state) => ({ ...state, category: e.target.value }));
   }
 
   function handleUpdateAlamat() {
@@ -63,70 +67,105 @@ export function AddressDetail() {
     );
   }
 
-  if (isLoading || isPending) return <LoadingContainer />;
-  if (error || !parseResult.success) return <div>something wrong please try again later</div>;
+  function handleDeleteAlamat() {
+    // console.log("delete")
+    DeleteAddress(parseResult.data.id, {
+      onSettled: () => navigate(`/customer/${parseResult.data.customer_id}/`),
+    });
+  }
 
-  console.log(data)
-  console.log(parseResult)
+  if (isLoading || isPending || isDeleting) return <LoadingContainer />;
+  if (error || !parseResult.success)
+    return <div>something wrong please try again later</div>;
+
+  // console.log(data)
+  // console.log(parseResult)
 
   return (
     <div className="w-full p-5 overflow-y-scroll">
-      <div className="flex justify-between">
+      <div className="flex justify-between flex-col md:flex-row">
         <div className="flex flex-col">
           <span className="text-xl">
             Service <b>{parseResult.data.customer_data}</b>
           </span>
-          {isEditAdd ? (
-            <div>
-              <form
-                action=""
-                className="flex flex-row gap-1 "
-              >
-                {/* <label htmlFor="alamat" className="text-sm">
+          {isUpdating ? (
+            <span>updating</span>
+          ) : (
+            <>
+              {isEditAdd ? (
+                <div>
+                  <form action="" className="flex flex-row gap-1 ">
+                    {/* <label htmlFor="alamat" className="text-sm">
                   Alamat
                 </label> */}
-                <input name="alamat" id="alamat" className="px-2" value={formUpdate?.address} onChange={handleFormAddress}/>
-                {/* <input type="text" id="alamat" name="alamat" /> */}
-                {/* <label htmlFor="kategori" className="text-sm">
+                    <input
+                      name="alamat"
+                      id="alamat"
+                      className="px-2"
+                      value={formUpdate?.address}
+                      onChange={handleFormAddress}
+                    />
+                    {/* <input type="text" id="alamat" name="alamat" /> */}
+                    {/* <label htmlFor="kategori" className="text-sm">
                   Kategori
                 </label> */}
-                <span>|</span>
-                <input type="text" id="kategori" name="kategori" className="px-2" value={formUpdate?.category} onChange={handleFormKategori}/>
-                <div className="flex flex-row justify-end gap-1">
-                  <div
-                    className="bg-gray-400 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
-                    onClick={() => setIsEditAdd(false)}
-                  >
-                    cancel
+                    <span>|</span>
+                    <input
+                      type="text"
+                      id="kategori"
+                      name="kategori"
+                      className="px-2"
+                      value={formUpdate?.category}
+                      onChange={handleFormKategori}
+                    />
+                    <div className="flex flex-row justify-end gap-1">
+                      <div
+                        className="bg-gray-400 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
+                        onClick={() => setIsEditAdd(false)}
+                      >
+                        cancel
+                      </div>
+                      <div
+                        className="bg-green-500 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
+                        onClick={handleUpdateAlamat}
+                      >
+                        submit
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              ) : (
+                <div className="flex flex-row gap-5 items-center">
+                  <div>
+                    <span>
+                      {parseResult.data.address} | {parseResult.data.category}
+                    </span>
                   </div>
-                  <div className="bg-green-500 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
-                  onClick={handleUpdateAlamat}>
-                    submit
+                  <div
+                    onClick={() => {
+                      setFormUpdate((state) => ({
+                        ...state,
+                        address: parseResult.data.address,
+                        category: parseResult.data.category,
+                      }));
+                      setIsEditAdd(true);
+                    }}
+                  >
+                    <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
-              </form>
-            </div>
-          ) : (
-            <div className="flex flex-row gap-5 items-center">
-              <div>
-                <span>
-                  {parseResult.data.address} | {parseResult.data.category}
-                </span>
-              </div>
-              <div onClick={() =>{ 
-                setFormUpdate((state)=>({...state,address:parseResult.data.address,category:parseResult.data.category}))
-                setIsEditAdd(true)
-                }}>
-                <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity" />
-              </div>
-            </div>
+              )}
+            </>
           )}
         </div>
 
         <div className="flex items-center">
-          <div className="flex flex-row gap-2">
-            <div className="px-5 py-1 bg-red-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
-              hidden={showForm}>
+          <div className="flex flex-row gap-2 w-full justify-center mt-2 md:mt-0">
+            <div
+              className="px-5 py-1 bg-red-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
+              hidden={showForm}
+              onClick={handleDeleteAlamat}
+            >
               Delete Address
             </div>
             <div
