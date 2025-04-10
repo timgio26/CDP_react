@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 // import { AddCustomer } from "./apiCustomer";
 import { useAddCustomer } from "./useCustomer";
+import { useEffect } from "react";
 
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 20px;
+  padding: 10px;
 `;
 
 const Form = styled.form`
@@ -66,14 +67,21 @@ export function FormCust({ onClose }) {
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
+    setValue,
     formState: { errors },
   } = useForm();
+
+  useEffect(()=>{
+    //yyyy-mm-dd
+    const today = new Date
+    setValue("join_date",today.toISOString().slice(0,10))
+  },[setValue])
 
   // console.log(onClose)
 
   function onSubmit(data) {
-    const formData = { ...data, email: data.email || null,phone: data.phone || null, };
+    const formData = { ...data, email: data.email || null,phone: data.phone || null,join_date:data.join_date };
     addCustomer(formData)
     onClose()
   }
@@ -115,10 +123,13 @@ export function FormCust({ onClose }) {
           {...register("phone", {
             required: true,
             pattern: {
-              value: /^(0|[1-9]\d*)(\.\d+)?$/,
+              value: /^(0\d+|\d+)(\.\d+)?$/,
             },
           })}
         />
+        <Label htmlFor="date">Join Date</Label>
+        <Input type="date" name="date" id="date" {...register("join_date")} />
+
         {errors.phone?.type === "required" && (
           <ErrorMessage role="alert">Harus diisi</ErrorMessage>
         )}

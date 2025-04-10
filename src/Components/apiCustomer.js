@@ -107,6 +107,16 @@ export async function UpdateAddress({id,data}) {
   return respData;
 }
 
+export async function DelAddress(id){
+  const response = await axios.delete(`${URL}address/${id}/`, {
+    headers: {
+      Authorization: KEY,
+    },
+  })
+  const respData = response.data;
+  return respData;
+}
+
 
 // Service 
 export async function GetService(id){

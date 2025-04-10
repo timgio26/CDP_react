@@ -11,7 +11,8 @@ import {
   GetService,
   DelService,
   UpdateAddress as updateAddressApi,
-  UpdateService as updateServiceApi
+  UpdateService as updateServiceApi,
+  DelAddress
 } from "./apiCustomer";
 import toast from "react-hot-toast";
 import {z} from 'zod'
@@ -128,6 +129,21 @@ export function useUpdateAddress() {
     },
   });
   return { UpdateAddress, isUpdating };
+}
+
+export function useDeleteAddress(){
+  const queryClient = useQueryClient();
+  const {mutate:DeleteAddress,isPending:isDeleting} = useMutation({
+    mutationFn:DelAddress,
+    onError:()=>{
+      toast.error("error delete address")
+    },
+    onSuccess:()=>{
+      queryClient.invalidateQueries("address");
+      toast.success("Service successfuly deleted");
+    }
+  })
+  return {DeleteAddress,isDeleting}
 }
 
 // Service

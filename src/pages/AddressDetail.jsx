@@ -26,8 +26,8 @@ const AddressDetailsSchema = z.object({
   category: z.string(), // Expects a string
   id: z.number(), // Expects a number
   img_url: z.nullable(z.string()), // Can be null or a string
-  lat: z.union([z.string(), z.literal("null")]), // Expects a string, including the string "null"
-  lng: z.union([z.string(), z.literal("null")]),
+  lat: z.union([z.string(), z.literal("null")]).nullable(), // Expects a string, including the string "null"
+  lng: z.union([z.string(), z.literal("null")]).nullable(),
   services: z.array(ServiceSchema).nullable(), // Expects a string, including the string "null"
 });
 
@@ -42,6 +42,8 @@ export function AddressDetail() {
     address: "",
     category: "",
   });
+
+
 
   const {UpdateAddress,isUpdating} = useUpdateAddress()
 
@@ -62,7 +64,10 @@ export function AddressDetail() {
   }
 
   if (isLoading || isPending) return <LoadingContainer />;
-  if (error) return <div>something wrong please try again later</div>;
+  if (error || !parseResult.success) return <div>something wrong please try again later</div>;
+
+  console.log(data)
+  console.log(parseResult)
 
   return (
     <div className="w-full p-5 overflow-y-scroll">
@@ -119,7 +124,11 @@ export function AddressDetail() {
         </div>
 
         <div className="flex items-center">
-          <div>
+          <div className="flex flex-row gap-2">
+            <div className="px-5 py-1 bg-red-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
+              hidden={showForm}>
+              Delete Address
+            </div>
             <div
               className="px-5 py-1 bg-blue-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
               hidden={showForm}

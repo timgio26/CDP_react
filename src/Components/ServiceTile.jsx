@@ -6,7 +6,7 @@ export function ServiceTile({data}){
     navigate('/service/'+data.id)
   }
     return (
-      <div key={data.id} className="border p-2 rounded-md shadow my-2">
+      <div key={data.id} className="border p-2 rounded-md shadow my-2 bg-white">
         <div className="flex justify-between">
             {/* <div> */}
 
