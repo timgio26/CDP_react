@@ -13,6 +13,7 @@ import { z } from "zod";
 import { ServiceTile } from "../Components/ServiceTile";
 
 import { FaEdit } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 // import { UpdateAddress } from "../Components/apiCustomer";
 
 const ServiceSchema = z.object({
@@ -43,6 +44,7 @@ export function AddressDetail() {
   const { DeleteAddress, isDeleting } = useDeleteAddress();
   const [showForm, setShowForm] = useState(false);
   const [isEditAdd, setIsEditAdd] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const parseResult = AddressDetailsSchema.safeParse(data);
   const [formUpdate, setFormUpdate] = useState({
     address: "",
@@ -83,132 +85,160 @@ export function AddressDetail() {
 
   return (
     <div className="w-full p-5 overflow-y-scroll">
-      <div className="flex justify-between flex-col md:flex-row">
-        <div className="flex flex-col">
-          <span className="text-xl">
-            Service <b>{parseResult.data.customer_data}</b>
-          </span>
-          {isUpdating ? (
-            <span>updating</span>
-          ) : (
-            <>
-              {isEditAdd ? (
-                <div>
-                  <form action="" className="flex flex-row gap-1 ">
-                    {/* <label htmlFor="alamat" className="text-sm">
+      <div className={showDeleteModal && "blur-sm"}>
+        <div className="flex justify-between flex-col md:flex-row">
+          <div className="flex flex-col">
+            <span className="text-xl">
+              Service <b>{parseResult.data.customer_data}</b>
+            </span>
+            {isUpdating ? (
+              <span>updating</span>
+            ) : (
+              <>
+                {isEditAdd ? (
+                  <div>
+                    <form
+                      action=""
+                      className="flex flex-col md:flex-row gap-1 "
+                    >
+                      {/* <label htmlFor="alamat" className="text-sm">
                   Alamat
                 </label> */}
-                    <input
-                      name="alamat"
-                      id="alamat"
-                      className="px-2"
-                      value={formUpdate?.address}
-                      onChange={handleFormAddress}
-                    />
-                    {/* <input type="text" id="alamat" name="alamat" /> */}
-                    {/* <label htmlFor="kategori" className="text-sm">
+                      <input
+                        name="alamat"
+                        id="alamat"
+                        className="px-2"
+                        value={formUpdate?.address}
+                        onChange={handleFormAddress}
+                      />
+                      {/* <input type="text" id="alamat" name="alamat" /> */}
+                      {/* <label htmlFor="kategori" className="text-sm">
                   Kategori
                 </label> */}
-                    <span>|</span>
-                    <input
-                      type="text"
-                      id="kategori"
-                      name="kategori"
-                      className="px-2"
-                      value={formUpdate?.category}
-                      onChange={handleFormKategori}
-                    />
-                    <div className="flex flex-row justify-end gap-1">
-                      <div
-                        className="bg-gray-400 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
-                        onClick={() => setIsEditAdd(false)}
-                      >
-                        cancel
+                      <span className="hidden md:block">|</span>
+                      <input
+                        type="text"
+                        id="kategori"
+                        name="kategori"
+                        className="px-2"
+                        value={formUpdate?.category}
+                        onChange={handleFormKategori}
+                      />
+                      <div className="flex flex-row justify-end gap-1">
+                        <div
+                          className="bg-gray-400 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
+                          onClick={() => setIsEditAdd(false)}
+                        >
+                          cancel
+                        </div>
+                        <div
+                          className="bg-green-500 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
+                          onClick={handleUpdateAlamat}
+                        >
+                          submit
+                        </div>
                       </div>
-                      <div
-                        className="bg-green-500 px-4 py-1 rounded-full cursor-pointer hover:opacity-75 text-sm"
-                        onClick={handleUpdateAlamat}
-                      >
-                        submit
-                      </div>
+                    </form>
+                  </div>
+                ) : (
+                  <div className="flex flex-row gap-5 items-center">
+                    <div>
+                      <span>
+                        {parseResult.data.address} | {parseResult.data.category}
+                      </span>
                     </div>
-                  </form>
-                </div>
-              ) : (
-                <div className="flex flex-row gap-5 items-center">
-                  <div>
-                    <span>
-                      {parseResult.data.address} | {parseResult.data.category}
-                    </span>
+                    <div
+                      onClick={() => {
+                        setFormUpdate((state) => ({
+                          ...state,
+                          address: parseResult.data.address,
+                          category: parseResult.data.category,
+                        }));
+                        setIsEditAdd(true);
+                      }}
+                    >
+                      <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity" />
+                    </div>
                   </div>
-                  <div
-                    onClick={() => {
-                      setFormUpdate((state) => ({
-                        ...state,
-                        address: parseResult.data.address,
-                        category: parseResult.data.category,
-                      }));
-                      setIsEditAdd(true);
-                    }}
-                  >
-                    <FaEdit className="opacity-50 cursor-pointer hover:opacity-100 transition-opacity" />
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+                )}
+              </>
+            )}
+          </div>
 
-        <div className="flex items-center">
-          <div className="flex flex-row gap-2 w-full justify-center mt-2 md:mt-0">
-            <div
-              className="px-5 py-1 bg-red-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
-              hidden={showForm}
-              onClick={handleDeleteAlamat}
-            >
-              Delete Address
-            </div>
-            <div
-              className="px-5 py-1 bg-blue-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
-              hidden={showForm}
-              onClick={() => setShowForm(true)}
-            >
-              Add Service
+          <div className="flex items-center">
+            <div className="flex flex-row gap-2 w-full justify-center mt-2 md:mt-0">
+              <div
+                className="px-5 py-1 bg-red-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
+                hidden={showForm || isEditAdd}
+                onClick={setShowDeleteModal}
+              >
+                Delete Address
+              </div>
+              <div
+                className="px-5 py-1 bg-blue-400 rounded hover:opacity-50 cursor-pointer transition-opacity ease-out"
+                hidden={showForm || isEditAdd}
+                onClick={() => setShowForm(true)}
+              >
+                Add Service
+              </div>
             </div>
           </div>
         </div>
+        <div className="flex justify-center">
+          <FormService setShowForm={setShowForm} showForm={showForm} />
+        </div>
+        <div>
+          {/* service list */}
+          {parseResult.data.services.map((each) => {
+            return (
+              <ServiceTile data={each} key={each.id} />
+              // <div key={each.id} className="border p-2 rounded-md shadow my-2">
+              //   <span className="text-sm font-semibold">
+              //     service date : {each.service_date}
+              //   </span>
+              //   <div className="grid grid-cols-3 justify-evenly border-t">
+              //     <div>
+              //       <span className="text-xs">Keluhan</span>
+              //       <p>{each.keluhan}</p>
+              //     </div>
+              //     <div>
+              //       <span className="text-xs">Tindakan</span>
+              //       <p>{each.tindakan}</p>
+              //     </div>
+              //     <div>
+              //       <span className="text-xs">Hasil</span>
+              //       <p>{each.hasil}</p>
+              //     </div>
+              //   </div>
+              // </div>
+            );
+          })}
+        </div>
+        {/* <p>{data?.address}</p> */}
       </div>
-      <div className="flex justify-center">
-        <FormService setShowForm={setShowForm} showForm={showForm} />
+
+      <div
+        className={`${
+          showDeleteModal ? "flex" : "hidden"
+        } z-10 border rounded shadow flex-col items-center bg-white p-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+      >
+        <GiCancel size={50} color="#dc2626" />
+        <span>Konfimasi hapus data alamat</span>
+        <div className="flex flex-row gap-2 mt-3">
+          <div
+            className="bg-gray-300 px-5 rounded flex items-center cursor-pointer hover:opacity-80"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            Cancel
+          </div>
+          <div
+            className="bg-red-600 px-5 rounded flex items-center cursor-pointer hover:opacity-80"
+            onClick={handleDeleteAlamat}
+          >
+            {isDeleting ? "Loading" : "Delete"}
+          </div>
+        </div>
       </div>
-      <div>
-        {/* service list */}
-        {parseResult.data.services.map((each) => {
-          return (
-            <ServiceTile data={each} key={each.id} />
-            // <div key={each.id} className="border p-2 rounded-md shadow my-2">
-            //   <span className="text-sm font-semibold">
-            //     service date : {each.service_date}
-            //   </span>
-            //   <div className="grid grid-cols-3 justify-evenly border-t">
-            //     <div>
-            //       <span className="text-xs">Keluhan</span>
-            //       <p>{each.keluhan}</p>
-            //     </div>
-            //     <div>
-            //       <span className="text-xs">Tindakan</span>
-            //       <p>{each.tindakan}</p>
-            //     </div>
-            //     <div>
-            //       <span className="text-xs">Hasil</span>
-            //       <p>{each.hasil}</p>
-            //     </div>
-            //   </div>
-            // </div>
-          );
-        })}
-      </div>
-      {/* <p>{data?.address}</p> */}
     </div>
   );
 }

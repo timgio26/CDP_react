@@ -186,16 +186,16 @@ export function useDelService() {
   return {DeleteService,isDeleting}
 }
 
-export function useUpadteService(){
+export function useUpdateService(){
   const queryClient = useQueryClient();
   const {mutate: UpdateService, isPending: isUpdating} =  useMutation({
     mutationFn: updateServiceApi,
     onError: () => {
-      toast.error("error update alamat.");
+      toast.error("error update service.");
     },
     onSuccess: () => {
       queryClient.invalidateQueries("service");
-      toast.success("alamat successfuly updated");
+      toast.success("service successfuly updated");
     },
   })
   return { UpdateService, isUpdating };
