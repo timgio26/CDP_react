@@ -77,9 +77,15 @@ export function CustomerDetail() {
           </div>
         </div>
         {editMode && (
-          <button className="px-5 py-1 border-slate-500 hover:opacity-50 border-2 rounded-md mx-2">
+          <div className="flex">
+          <button className="px-5 py-1 bg-green-500 hover:opacity-50 rounded-md mx-2">
             Save
           </button>
+          <div className="px-5 py-1 bg-gray-400 hover:opacity-50 rounded-md mx-2"
+          onClick={()=>setEditMode(false)}>
+            Cancel 
+          </div>
+          </div>
         )}
       </form>
 

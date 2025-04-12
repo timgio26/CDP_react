@@ -1,15 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconButton } from "./IconButton";
 import { MyDialog } from "./MyDialog";
 import { useDeleteCustomer } from "./useCustomer";
 import { IoMdEye, IoMdTrash } from "react-icons/io";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 export function CustomerTable({ header = [], data = [] }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [delData, setDelData] = useState(null);
   const { DeleteCustomer, isDeleting } = useDeleteCustomer();
   const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const curPage = Number(searchParams.get("page"))
+
+  
+  useEffect(()=>{
+    if(!curPage){
+      setSearchParams(`?${new URLSearchParams({ page: 1 })}`)
+    }
+  },[curPage,setSearchParams])
+
+
+
+  const npage = Math.ceil(data.length/10)
 
   function openDialog(data) {
     setDelData(data);
@@ -31,6 +45,19 @@ export function CustomerTable({ header = [], data = [] }) {
 
   function handleSeeAddress(id){
     navigate(`/address/${id}/`)
+  }
+
+  function handleNextPage(){
+    // searchParams.set("page",curPage+1)
+    if(curPage==npage)return
+    setSearchParams(`?${new URLSearchParams({ page: curPage+1 })}`)
+  }
+
+  function handlePrefPage(){
+    // searchParams.set("page",curPage-1)
+    if(curPage==1)return
+    setSearchParams(`?${new URLSearchParams({ page: curPage-1 })}`)
+    
   }
 
   return (
@@ -73,7 +100,13 @@ export function CustomerTable({ header = [], data = [] }) {
                 <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
                   <ul>
                     {each.addresses.map((eachAdd) => (
-                      <li key={eachAdd.id} onClick={()=>handleSeeAddress(eachAdd.id)} className="cursor-pointer hover:opacity-80 list-disc">{eachAdd.address}</li>
+                      <li
+                        key={eachAdd.id}
+                        onClick={() => handleSeeAddress(eachAdd.id)}
+                        className="cursor-pointer hover:opacity-80 list-disc"
+                      >
+                        {eachAdd.address}
+                      </li>
                     ))}
                   </ul>
                 </td>
@@ -98,6 +131,15 @@ export function CustomerTable({ header = [], data = [] }) {
             ))}
           </tbody>
         </table>
+        <div className="flex flex-row items-center gap-2 mt-2 ">
+          <div className="bg-gray-300 px-4 py-1 rounded-full hover:opacity-75  cursor-pointer"
+          onClick={handlePrefPage}>prev</div>
+          <span>
+            page {searchParams.get("page")} of {npage}
+          </span>
+          <div className="bg-gray-300 px-4 py-1 rounded-full hover:opacity-75 cursor-pointer"
+          onClick={handleNextPage}>next</div>
+        </div>
       </div>
 
       <div className="sm:hidden">
